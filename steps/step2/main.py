@@ -8,10 +8,10 @@ import time
 
 def advection_sim():
     """ 1 dimensional forwards discretized scheme """
-    nx = 41      # Number of x steps
+    nx = 410      # Number of x steps
     dx = 2.0/(nx-1) # Length of each step (plane is 2 units long)
-    nt = 25    #nt is the number of timesteps we want to calculate
-    dt = 0.025  #dt is the amount of time each timestep covers (delta t)
+    nt = 850    #nt is the number of timesteps we want to calculate
+    dt = 0.00125  #dt is the amount of time each timestep covers (delta t)
     c = 1.0      #assume wavespeed of c = 1
     u = np.ones(nx)
     u[.5/dx : 1/dx+1]=2  #setting u = 2 between 0.5 and 1 as per our I.C.s
@@ -20,7 +20,7 @@ def advection_sim():
       print(t)
       un = u.copy()
       for i in range(1, nx):
-        u[i] = un[i] - c * dt/dx * (un[i] - un[i-1])
+        u[i] = un[i] - un[i] * dt/dx * (un[i] - un[i-1])
     plt.plot(np.linspace(0, 2, nx), u)
     plt.show()
 
