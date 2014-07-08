@@ -17,7 +17,6 @@ def advection_sim():
     u[.5/dx : 1/dx+1]=2  #setting u = 2 between 0.5 and 1 as per our I.C.s
     plt.plot(np.linspace(0, 2, nx), u)
     for t in range(nt):
-      print(t)
       un = u.copy()
       for i in range(1, nx):
         u[i] = un[i] - c * dt/dx * (un[i] - un[i-1])
