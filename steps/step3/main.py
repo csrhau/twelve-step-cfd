@@ -3,33 +3,40 @@
 from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
-import time
+import itertools
 
-def linear_conv(nx):
-    dx = 2./(nx-1)
-    nt = 20    #nt is the number of timesteps we want to calculate
-    c = 1
-    sigma = .5
-    
-    dt = sigma*dx
 
-    u = np.ones(nx) 
-    u[.5/dx : 1/dx+1]=2
-
-    un = np.ones(nx)
-
-    for n in range(nt):  #iterate through time
-        un = u.copy() ##copy the existing values of u into un
-        for i in range(1,nx):
-            u[i] = un[i]-c*dt/dx*(un[i]-un[i-1])
-    plt.plot(np.linspace(0,2,nx),u)
+def heat_equation():
+    """ Perform the heat/fourier/diffusion equation in 1d """
+    plt.ion()
     plt.show()
+    nx = 250
+    nt = 25000
+    dt = 0.0001
+    vis = 0.1 # Thermal coefficient (Or viscosity)
+    dx = 2.0 / (nx - 1) # 2 arbitrary units long
+    # Create initial hat function
+    ua = np.ones(nx)
+    ua[.5/dx : 1/dx+1]=2  #setting u = 2 between 0.5 and 1 as per our I.C.s
+    ub = ua.copy()
+    array_switch = itertools.cycle([ua, ub])
+    u = array_switch.next()
+    for t in range(nt):
+        un = u
+        u = array_switch.next()
+        for i in range(1, nx-1):
+            u[i] = un[i] + vis *  dt / dx**2 * (un[i+1] - 2*un[i] + un[i -1])
+        plt.pause(0.00001)
+        plt.plot(np.linspace(0, 2, nx), u)
+        plt.draw()
+
+
+
 
 def main():
-    """ Application Entry Point"""
-    linear_conv(500)
-    print('done')
+    """ Application Entry Point """
+    heat_equation()
+    print('Done')
 
 if __name__ == '__main__':
     main()
